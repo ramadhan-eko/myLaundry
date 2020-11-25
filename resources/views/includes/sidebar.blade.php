@@ -1,6 +1,6 @@
  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+ <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
@@ -12,12 +12,12 @@
       <hr class="sidebar-divider my-0">
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{{ route('dashboard') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
       <li class="nav-item">
-      <a class="nav-link" href="{{ url() }}">
+      <a class="nav-link" href="">
           <i class="fas fa-fw fa-id-card"></i>
           <span>Kartu Laundry</span></a>
       </li>
@@ -33,8 +33,11 @@
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="login.html">Data Pegawai</a>
+          <a class="collapse-item" href="{{ route('produk-service.index')}}">Produk & Service </a>
             <a class="collapse-item" href="login.html">Data Pelanggan</a>
+            <a class="collapse-item" href="login.html">Promo</a>
+            <a class="collapse-item" href="login.html">Pengeluaran Laundry</a>
+            <a class="collapse-item" href="login.html">Broadcast Pesan</a>
           </div>
         </div>
       </li>
@@ -50,8 +53,8 @@
         </a>
         <div id="collapsePages1" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="login.html">Data Pegawai</a>
-            <a class="collapse-item" href="login.html">Data Pelanggan</a>
+            <a class="collapse-item" href="login.html">Arus Kas</a>
+            <a class="collapse-item" href="login.html">Laporan Statistik</a>
           </div>
         </div>
       </li>
@@ -62,8 +65,8 @@
         </a>
         <div id="collapsePages2" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="login.html">Data Pegawai</a>
-            <a class="collapse-item" href="login.html">Data Pelanggan</a>
+            <a class="collapse-item" href="login.html">Pengaturan Umum</a>
+            <a class="collapse-item" href="login.html">Manajemen User</a>
           </div>
         </div>
       </li>

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\ProdukServiceController;
+use App\ProdukService;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +24,6 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/', 'DashboardController@index')
             ->name('dashboard');
+
+        Route::resource('produk-service', 'ProdukServiceController');
     });
