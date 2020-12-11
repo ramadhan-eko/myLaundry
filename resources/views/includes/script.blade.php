@@ -14,3 +14,13 @@
   <!-- Page level custom scripts -->
 <script src="{{ url('backend/js/demo/chart-area-demo.js') }}"></script>
 <script src="{{ url('backend/js/demo/chart-pie-demo.js') }}"></script>
+
+ <!-- Page level plugins -->
+<script src="{{ url('backend/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url('backend/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#dataTable').DataTable();
+	});
+</script>
+@include('sweetalert::alert')

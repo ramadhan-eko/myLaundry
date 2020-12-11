@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProdukServiceRequest;
 use App\ProdukService;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
 
 class ProdukServiceController extends Controller
@@ -40,13 +41,12 @@ class ProdukServiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProdukServiceRequest $request)
     {
         $data = $request->all();
         $data['slug'] = Str::slug($request->produk);
-
         ProdukService::create($data);
-        return redirect()->route('produk-service.index');
+        return redirect()->route('produk-service.index')->with('success', 'Data Created Successfully');
     }
 
     /**
@@ -91,7 +91,7 @@ class ProdukServiceController extends Controller
 
         $item->update($data);
 
-        return redirect()->route('produk-service.index');
+        return redirect()->route('produk-service.index')->with('success', 'Data Updated Successfully');
     }
 
     /**
@@ -104,7 +104,6 @@ class ProdukServiceController extends Controller
     {
         $item = ProdukService::findOrFail($id);
         $item->delete();
-
-        return redirect()->route('produk-service.index');
+        return redirect()->route('produk-service.index')->with('warning', 'Data Deleted Successfully');
     }
 }
