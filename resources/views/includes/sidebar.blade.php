@@ -36,7 +36,7 @@
           <a class="collapse-item" href="{{ route('produk-service.index') }}">Produk & Service </a>
             <a class="collapse-item" href="{{ route('customer.index') }}">Data Pelanggan</a>
             <a class="collapse-item" href="{{ route('user-level.index') }}">Level User</a>
-            <a class="collapse-item" href="login.html">Promo</a>
+            <a class="collapse-item" href="{{ route('promo.index') }}">Promo</a>
             <a class="collapse-item" href="login.html">Pengeluaran Laundry</a>
             <a class="collapse-item" href="login.html">Broadcast Pesan</a>
           </div>

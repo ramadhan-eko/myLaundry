@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\User;
-use App\UserLevel;
+use App\Http\Requests\Admin\PromoRequest;
+use App\Promo;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Str;
 
-class UserLevelController extends Controller
+class PromoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +18,9 @@ class UserLevelController extends Controller
      */
     public function index()
     {
-        $items = UserLevel::all();
+        $items = Promo::all();
 
-        return view('pages.admin.user-level.index', [
+        return view('pages.admin.promo.index', [
             'items' => $items
         ]);
     }
@@ -30,7 +32,7 @@ class UserLevelController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.user-level.create');
+        return view('pages.admin.promo.create');
     }
 
     /**
@@ -39,12 +41,12 @@ class UserLevelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PromoRequest $request)
     {
         $data = $request->all();
-
-        UserLevel::create($data);
-        return redirect()->route('user-level.index')->with('success', 'Data Created Successfully');
+        $data['slug'] = Str::slug($request->kd_promo);
+        Promo::create($data);
+        return redirect()->route('promo.index')->with('success', 'Data Created Successfully');
     }
 
     /**
@@ -66,9 +68,9 @@ class UserLevelController extends Controller
      */
     public function edit($id)
     {
-        $item = UserLevel::findOrFail($id);
+        $item = Promo::findOrFail($id);
 
-        return view('pages.admin.user-level.edit', [
+        return view('pages.admin.promo.edit', [
             'item' => $item
         ]);
     }
@@ -80,13 +82,16 @@ class UserLevelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PromoRequest $request, $id)
     {
         $data = $request->all();
-        $item = UserLevel::findOrFail($id);
+        $data['slug'] = Str::slug($request->kd_promo);
+
+        $item = Promo::findOrFail($id);
+
         $item->update($data);
 
-        return redirect()->route('user-level.index')->with('success', 'Data Updated Successfully');
+        return redirect()->route('promo.index')->with('success', 'Data Updated Successfully');
     }
 
     /**
@@ -97,8 +102,8 @@ class UserLevelController extends Controller
      */
     public function destroy($id)
     {
-        $data = UserLevel::findOrFail($id);
-        $data->delete();
-        return redirect()->route('user-level.index')->with('warning', 'Data Deleted Successfully');
+        $item = Promo::findOrFail($id);
+        $item->delete();
+        return redirect()->route('promo.index')->with('warning', 'Data Deleted Successfully');
     }
 }

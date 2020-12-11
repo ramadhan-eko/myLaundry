@@ -53,7 +53,7 @@ class CustomerController extends Controller
         $data['waktu_join'] = Carbon::now();
 
         Customer::create($data);
-        return redirect()->route('customer.index');
+        return redirect()->route('customer.index')->with('success', 'Data Created Successfully');
     }
 
     /**
@@ -95,7 +95,7 @@ class CustomerController extends Controller
         $item = Customer::findOrFail($id);
         $item->update($data);
 
-        return redirect()->route('customer.index');
+        return redirect()->route('customer.index')->with('success', 'Data Updated Successfully');
     }
 
     /**
@@ -108,6 +108,6 @@ class CustomerController extends Controller
     {
         $data = Customer::findOrFail($id);
         $data->delete();
-        return redirect()->route('customer.index');
+        return redirect()->route('customer.index')->with('warning', 'Data Deleted Successfully');
     }
 }

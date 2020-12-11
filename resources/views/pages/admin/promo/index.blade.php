@@ -5,13 +5,13 @@
         <div class="container-fluid">
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Produk & Services</h1>
+            <h1 class="h3 mb-0 text-gray-800">Promo</h1>
           </div>
            <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-                 <a href="{{ route('produk-service.create') }}" class="btn btn-sm btn-primary shadow-sm">
-                    <i class="fas fa-plus fa-sm text-white"></i> Tambah Data
+                 <a href="{{ route('promo.create') }}" class="btn btn-sm btn-primary shadow-sm">
+                    <i class="fas fa-plus fa-sm text-white"></i> Tambah
                 </a>
             </div>
             <div class="card-body">
@@ -20,10 +20,9 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Produk</th>
+                            <th>Kode Promo</th>
                             <th>Deskripsi</th>
-                            <th>harga</th>
-                            <th>Total Transaksi</th>
+                            <th>Diskon</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -31,15 +30,14 @@
                             @forelse ($items as $item)
                             <tr>
                                 <td>{{ $item->id}}</td>
-                                <td>{{ $item->produk}}</td>
+                                <td>{{ $item->kd_promo}}</td>
                                 <td>{{ $item->deskripsi}}</td>
-                                <td>{{ $item->harga}}</td>
-                                <td>{{ $item->total_transaksi}}</td>
+                                <td>{{ $item->diskon}}</td>
                                 <td>
-                                    <a href="{{ route('produk-service.edit', $item->id)}}" class="btn btn-info">
+                                    <a href="{{ route('promo.edit', $item->id)}}" class="btn btn-info">
                                         <i class="fa fa-pencil-alt"></i> Ubah
                                     </a>
-                                    <form action="{{ route('produk-service.destroy', $item->id)}}" class="d-line" method="POST">
+                                    <form action="{{ route('promo.destroy', $item->id)}}" class="d-line" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger">

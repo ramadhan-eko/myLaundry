@@ -30,6 +30,7 @@ Route::prefix('admin')
         Route::resource('customer', 'CustomerController');
         Route::resource('user-level', 'UserLevelController');
         Route::resource('cucian-item', 'CucianItemController');
+        Route::resource('promo', 'PromoController');
     });
 
 Auth::routes();

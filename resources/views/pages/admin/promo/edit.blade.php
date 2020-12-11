@@ -20,28 +20,24 @@
 
           <div class="card shadow">
             <div class="card-body">
-                <form action="{{ route('produk-service.update', $item->id) }}" method="post">
+                <form action="{{ route('promo.update', $item->id) }}" method="post">
                     @method('PUT')
                     @csrf
                    <div class="form-group">
-                        <label for="produk">Produk</label>
-                        <input type="text" class="form-control" name="produk" placeholder="produk" value="{{ $item->produk}}">
+                        <label for="kd_promo">Kode Promo</label>
+                        <input type="text" class="form-control" name="kd_promo" placeholder="kd_promo" value="{{ $item->kd_promo}}">
                     </div>
                      <div class="form-group">
                         <label for="deskripsi">Deskripsi</label>
                         <input type="text" class="form-control" name="deskripsi" placeholder="deskripsi" value="{{ $item->deskripsi }}">
                     </div>
                     <div class="form-group">
-                        <label for="harga">Harga Satuan</label>
-                        <input type="number" class="form-control" name="harga" placeholder="harga" value="{{ $item->harga}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="total_transaksi">Total Transaksi</label>
-                        <input type="number" class="form-control" name="total_transaksi" placeholder="total_transaksi" value="{{ $item->total_transaksi}}">
+                        <label for="diskon">Diskon</label>
+                        <input type="number" class="form-control" name="diskon" placeholder="diskon" value="{{ $item->diskon}}">
                     </div>
                    <div class="form-group">
                         <button type="submit" class="btn btn-md btn-primary btn-icon icon-left"><i class='fas fa-save'></i> Simpan</button>&nbsp;&nbsp;
-                        <a class="btn btn-md btn-success btn-icon icon-left" href="{{ route('produk-service.index') }}"><i class='fas fa-reply'></i> Kembali</a>
+                        <a class="btn btn-md btn-success btn-icon icon-left" href="{{ route('promo.index') }}"><i class='fas fa-reply'></i> Kembali</a>
                     </div>
                 </form>
             </div>
