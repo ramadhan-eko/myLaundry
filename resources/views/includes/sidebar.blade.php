@@ -17,7 +17,7 @@
           <span>Dashboard</span></a>
       </li>
       <li class="nav-item">
-      <a class="nav-link" href="">
+      <a class="nav-link" href="{{ route('laundry-card.index') }}">
           <i class="fas fa-fw fa-id-card"></i>
           <span>Kartu Laundry</span></a>
       </li>
@@ -33,8 +33,9 @@
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-          <a class="collapse-item" href="{{ route('produk-service.index')}}">Produk & Service </a>
-            <a class="collapse-item" href="login.html">Data Pelanggan</a>
+          <a class="collapse-item" href="{{ route('produk-service.index') }}">Produk & Service </a>
+            <a class="collapse-item" href="{{ route('customer.index') }}">Data Pelanggan</a>
+            <a class="collapse-item" href="{{ route('user-level.index') }}">Level User</a>
             <a class="collapse-item" href="login.html">Promo</a>
             <a class="collapse-item" href="login.html">Pengeluaran Laundry</a>
             <a class="collapse-item" href="login.html">Broadcast Pesan</a>

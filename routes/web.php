@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CucianItemController;
 use App\Http\Controllers\Admin\ProdukServiceController;
 use App\ProdukService;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,10 @@ Route::prefix('admin')
             ->name('dashboard');
 
         Route::resource('produk-service', 'ProdukServiceController');
+        Route::resource('laundry-card', 'LaundryCardController');
+        Route::resource('customer', 'CustomerController');
+        Route::resource('user-level', 'UserLevelController');
+        Route::resource('cucian-item', 'CucianItemController');
     });
 
 Auth::routes();
