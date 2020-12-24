@@ -38,6 +38,10 @@
                                     <td>{{ $item->status }}</td>
                                 </tr>
                                 <tr>
+                                    <td>Total Harga</td>
+                                    <td>{{ $CucianItems->sum('total') }}</td>
+                                </tr>
+                                <tr>
                                     <td>Status Pembayaran</td>
                                     <td>{{ $item->pembayaran }}</td>
                                 </tr>
@@ -53,7 +57,7 @@
                                 </tr>
                             </table>
                             <div style="text-align: center;padding-top:12px;">
-                                <a href='#' class="btn btn-lg btn-primary btn-icon icon-left"><i class='fas fa-receipt'></i> Bayar</a>&nbsp;&nbsp;
+                                <a href="{{ route('payment.show',$item->kode_kartu) }}" class="btn btn-lg btn-primary btn-icon icon-left"><i class='fas fa-receipt'></i> Bayar</a>&nbsp;&nbsp;
                                 @if(!$item->waktu_selesai || $item->waktu_diambil)
                                 <a href="{{ route('laundry-card.edit',$item->id) }}" class="btn disabled btn-lg btn-primary btn-icon icon-left"><i class='fas fa-check-circle'></i> Set sudah diambil</a>
                                 @else

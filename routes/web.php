@@ -31,6 +31,7 @@ Route::prefix('admin')
         Route::resource('user-level', 'UserLevelController');
         Route::resource('cucian-item', 'CucianItemController');
         Route::resource('promo', 'PromoController');
+        Route::resource('payment', 'PaymentController');
     });
 
 Auth::routes();
