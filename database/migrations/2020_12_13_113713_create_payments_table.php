@@ -18,9 +18,10 @@ class CreatePaymentsTable extends Migration
             $table->string('kode_payment');
             $table->string('kode_kartu');
             $table->timestamp('waktu_bayar');
+            $table->string('pelanggan');
             $table->integer('total_cuci');
-            $table->string('kode_promo');
-            $table->integer('diskon');
+            $table->string('kode_promo')->nullable();
+            $table->integer('diskon')->nullable();
             $table->integer('total_bayar');
             $table->softDeletes();
             $table->timestamps();
