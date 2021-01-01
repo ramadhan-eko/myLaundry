@@ -25,8 +25,9 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label for="id_kartu">Kode Kartu</label>
+                            <label for="kode_kartu">Kode Kartu</label>
                             <h3>{{ $laundrycard->kode_kartu }}</h3>
+                            <input hidden class="form-control" type="text" name="kode_kartu" value="{{ $laundrycard->kode_kartu }}">
                             <input hidden class="form-control" type="text" name="id_kartu" value="{{ $laundrycard->id }}">
                         </div>
                         <div class="form-group">

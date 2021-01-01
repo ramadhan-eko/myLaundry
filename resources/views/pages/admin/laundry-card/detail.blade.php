@@ -39,7 +39,7 @@
                                 </tr>
                                 <tr>
                                     <td>Total Harga</td>
-                                    <td>{{ $CucianItems->sum('total') }}</td>
+                                    <td>Rp. {{ $CucianItems->sum('total') }}</td>
                                 </tr>
                                 <tr>
                                     <td>Status Pembayaran</td>
@@ -57,15 +57,36 @@
                                 </tr>
                             </table>
                             <div style="text-align: center;padding-top:12px;">
-                                <a href="{{ route('payment.show',$item->kode_kartu) }}" class="btn btn-lg btn-primary btn-icon icon-left"><i class='fas fa-receipt'></i> Bayar</a>&nbsp;&nbsp;
-                                @if(!$item->waktu_selesai || $item->waktu_diambil)
-                                <a href="{{ route('laundry-card.edit',$item->id) }}" class="btn disabled btn-lg btn-primary btn-icon icon-left"><i class='fas fa-check-circle'></i> Set sudah diambil</a>
+                                <!-- button bayar -->
+                                @if(!$CucianItems->count() == 0 && $item->pembayaran !== 'Sudah Bayar')
+                                <a href="{{ route('payment.create',$item->kode_kartu) }}" class="btn btn-primary btn-icon icon-left"><i class='fas fa-receipt'></i> Bayar</a>&nbsp;&nbsp;
                                 @else
-                                <a href="{{ route('laundry-card.edit',$item->id) }}" class="btn btn-lg btn-primary btn-icon icon-left"><i class='fas fa-check-circle'></i> Set sudah diambil</a>
+                                <a href="{{ route('payment.create',$item->kode_kartu) }}" class="btn disabled btn-primary btn-icon icon-left"><i class='fas fa-receipt'></i> Bayar</a>&nbsp;&nbsp;
+                                @endif
+                                <!-- akhir button bayar -->
+
+                                <!-- button selesai cuci -->
+                                @if(!$item->waktu_selesai && !$CucianItems->count() == 0)
+                                <a href="{{ route('laundry-card.selesai',$item->id) }}" class="btn btn-primary btn-icon icon-left"><i class='fas fa-check-circle'></i> Set selesai</a>&nbsp;&nbsp;
+                                @else
+                                <a href="{{ route('laundry-card.selesai',$item->id) }}" class="btn disabled btn-primary btn-icon icon-left"><i class='fas fa-check-circle'></i> Set selesai</a>&nbsp;&nbsp;
+                                @endif
+                                <!-- akhir button selesai cuci -->
+
+                                <!-- button diambil -->
+                                @if(!$item->waktu_selesai || $item->waktu_diambil || $item->pembayaran === 'Belum Bayar')
+                                <a href="{{ route('laundry-card.diambil',$item->id) }}" class="btn disabled btn-primary btn-icon icon-left"><i class='fas fa-check-circle'></i> Set sudah diambil</a>
+                                @else
+                                <a href="{{ route('laundry-card.diambil',$item->id) }}" class="btn btn-primary btn-icon icon-left"><i class='fas fa-check-circle'></i> Set sudah diambil</a>
                                 @endif
                                 &nbsp;&nbsp;
-                                <a href="{{ route('cucian-item.show', [$item->id]) }}" class="btn btn-lg btn-primary btn-icon icon-left"><i class='fas fa-tshirt'></i> Tambah Cucian</a>&nbsp;&nbsp;
-                                <div style='margin-top:12px;'>
+                                <!-- akhir button diambil -->
+
+                                @if(!$item->waktu_diambil)
+                                <a href="{{ route('cucian-item.create', [$item->id]) }}" class="btn btn-primary btn-icon icon-left"><i class='fas fa-tshirt'></i> Tambah Cucian</a>&nbsp;&nbsp;
+                                @endif
+
+                                <div style='text-align: center;margin-top:12px;'>
                                     <form action="{{ route('laundry-card.destroy', $item->id) }}" method="post" class="d-inline">
                                         @csrf
                                         @method('delete')
@@ -87,17 +108,22 @@
                                 <thead>
                                     <tr>
                                         <th>Items</th>
+                                        <th>Harga Satuan</th>
                                         <th>Quantity</th>
                                         <th>Total</th>
+                                        @if(!$item->waktu_diambil || $item->pembayaran !== 'Sudah Bayar')
                                         <th>Aksi</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($CucianItems as $CucianItem)
                                     <tr>
                                         <td>{{ $CucianItem->produk }}</td>
+                                        <td>Rp. {{ $CucianItem->harga_satuan }}</td>
                                         <td>{{ $CucianItem->quantity }}</td>
                                         <td class="">Rp. {{ $CucianItem->total }}</td>
+                                        @if(!$item->waktu_diambil || $item->pembayaran !== 'Sudah Bayar')
                                         <td>
                                             <a href="{{ route('cucian-item.edit', $CucianItem->id) }}" class="btn btn-info"><i class="fa fa-pencil-alt"></i></a>
                                             <form action="{{ route('cucian-item.destroy',$CucianItem->id) }}" method="post" class="d-inline">
@@ -108,6 +134,7 @@
                                                 </button>
                                             </form>
                                         </td>
+                                        @endif
                                     </tr>
                                     @empty
                                     <tr>

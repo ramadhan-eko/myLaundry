@@ -26,13 +26,14 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                         <div class="form-group">
-                            <label for="id_kartu">Kode Kartu</label>
+                            <label>Kode Kartu</label>
                             <h3>{{ $laundrycard->kode_kartu }}</h3>
-                            <input hidden class="form-control" type="text" name="id_kartu" value="{{ $laundrycard->id }}">
+                            <input hidden readonly type="text" class="form-control" name="id_kartu" value="{{ $laundrycard->id }}">
                         </div>
                         <div class="form-group">
                             <label for="produk">Produk</label>
                             <input readonly type="text" class="form-control" name="produk" value="{{ $item->produk }}">
+                            <input hidden readonly type="text" class="form-control" name="id_service" value="{{ $item->id_service }}">
                         </div>
                         <div class="form-group">
                             <label for="quantity">Quantity</label>

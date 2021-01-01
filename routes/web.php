@@ -29,9 +29,16 @@ Route::prefix('admin')
         Route::resource('laundry-card', 'LaundryCardController');
         Route::resource('customer', 'CustomerController');
         Route::resource('user-level', 'UserLevelController');
-        Route::resource('cucian-item', 'CucianItemController');
+        Route::resource('cucian-item', 'CucianItemController')->except('create');
         Route::resource('promo', 'PromoController');
-        Route::resource('payment', 'PaymentController');
+        Route::resource('payment', 'PaymentController')->except('create');
+
+        // route buatan
+        Route::get('/payment/create/{id}', 'PaymentController@create')->name('payment.create');
+        Route::get('/laundry-card/detail/{id}', 'LaundryCardController@detail')->name('laundry-card.detail');
+        Route::get('/cucian-item/create/{id}', 'CucianItemController@create')->name('cucian-item.create');
+        Route::get('/laundry-card/diambil/{id}', 'LaundryCardController@diambil')->name('laundry-card.diambil');
+        Route::get('/laundry-card/selesai/{id}', 'LaundryCardController@selesai')->name('laundry-card.selesai');
     });
 
 Auth::routes();

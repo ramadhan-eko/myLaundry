@@ -13,7 +13,6 @@
             <a href="{{ route('laundry-card.create') }}" class="btn btn-sm btn-primary shadow-sm">
                 <i class="fas fa-plus fa-sm text-white-50"></i> Registrasi Cucian Pelanggan
             </a>
-            <!-- <h6 class="m-0 font-weight-bold text-primary">Kartu Laundry</h6> -->
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -46,7 +45,11 @@
                                 Selesai: <b>{{ $item->waktu_selesai ? $item->waktu_selesai : '-' }}</b><br>
                                 Diambil: <b>{{ $item->waktu_diambil ? $item->waktu_diambil : '-' }}</b>
                             </td>
-                            <td>{{ $item->total_harga }}</td>
+                            @if($item->item_cucian === null)
+                            <td>0</td>
+                            @else
+                            <td>Rp. {{ $item_cucian->produk }}</td>
+                            @endif
                             <td>
                                 <!-- kondisi pembayaran -->
                                 @if($item->pembayaran === 'Belum Bayar')
@@ -60,22 +63,11 @@
                                 <span class="badge badge-pill badge-success">Sudah Diambil</span>
                                 @endif
                             </td>
-                            <!-- action -->
-                            <!-- <td>
-                                <a href="{{ route('laundry-card.show', $item->id) }}" class="btn btn-info"><i class="fa fa-pencil-alt"></i></a>
-                                <form action="{{ route('laundry-card.destroy', $item->id) }}" method="post" class="d-inline">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td> -->
                         </tr>
                         @empty
                         <tr>
                             <td colspan="7" class="text-center">
-                                Data Kosong
+                                Belum ada kartu laundry silahkan buat kartu laundry baru
                             </td>
                         </tr>
                         @endforelse

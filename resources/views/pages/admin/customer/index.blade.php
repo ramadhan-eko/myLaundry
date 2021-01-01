@@ -13,7 +13,6 @@
             <a href="{{ route('customer.create') }}" class="btn btn-sm btn-primary shadow-sm">
                 <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Pelanggan
             </a>
-            <!-- <h6 class="m-0 font-weight-bold text-primary">Kartu Laundry</h6> -->
         </div>
         <div class="card-body">
             <div class="table-responsive">

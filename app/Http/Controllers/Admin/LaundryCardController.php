@@ -19,7 +19,8 @@ class LaundryCardController extends Controller
     public function index()
     {
         $items = LaundryCard::with([
-            'datacuci'
+            'datacuci',
+            'itemCucian'
         ])->get();
         // die($items);
 
@@ -60,7 +61,7 @@ class LaundryCardController extends Controller
         $data['total_harga'] = 0;
 
         LaundryCard::create($data);
-        return redirect()->route('laundry-card.index');
+        return redirect()->route('laundry-card.detail')->with('success', 'Data Added Successfully');
     }
 
     /**
@@ -84,6 +85,7 @@ class LaundryCardController extends Controller
         ]);
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -92,14 +94,7 @@ class LaundryCardController extends Controller
      */
     public function edit($id)
     {
-        $item = LaundryCard::findOrFail($id);
-        // $data->waktu_diambil = Carbon::now();
-        $item->update([
-            'waktu_diambil' => Carbon::now()
-        ]);
-        // $item->update($data);
-
-        return redirect()->route('laundry-card.index');
+        //
     }
 
     /**
@@ -137,5 +132,26 @@ class LaundryCardController extends Controller
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public function diambil($id)
+    {
+        $item = LaundryCard::findOrFail($id);
+        $item->update([
+            'waktu_diambil' => Carbon::now()
+        ]);
+
+        return redirect()->route('laundry-card.index')->with('success', 'Data laundry untuk kode ' . $item->kode_kartu . ' sudah diambil');
+    }
+
+    public function selesai($id)
+    {
+        $item = LaundryCard::findOrFail($id);
+        $item->update([
+            'status' => 'Selesai',
+            'waktu_selesai' => Carbon::now()
+        ]);
+
+        return redirect()->route('laundry-card.index')->with('success', 'Data laundry untuk kode ' . $item->kode_kartu . ' telah selesai dicuci');
     }
 }

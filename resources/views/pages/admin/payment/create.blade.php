@@ -5,50 +5,144 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Daftar Transaksi</h1>
+        <h1 class="h3 mb-0 text-gray-800">Detail Pembayaran</h1>
     </div>
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <!-- <a href="{{ route('laundry-card.create') }}" class="btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-plus fa-sm text-white-50"></i> Registrasi Cucian Pelanggan
-            </a> -->
-            <h6 class="m-0 font-weight-bold text-primary">Pembayaran untuk {{ $kode_inv }}</h6>
-        </div>
+
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{$error}}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+    <div class="card-shadow">
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Kode Kartu</th>
-                            <th>Pelanggan</th>
-                            <th>Status</th>
-                            <th>Waktu</th>
-                            <th>Total Harga</th>
-                            <th>Status Pembayaran & Pick Up</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
-            <div>
-                Keterangan status kartu <br />
-                <ul>
-                    <li><span class="badge badge-secondary">Hold</span> : Kartu laundry sudah dibuat, pelanggan belum membuat daftar cucian, cucian dapat ditambahkan di menu laundry room</li>
-                    <li><span class="badge badge-info">Laundry Room</span> : Kartu laundry sudah memiliki antrian di laundry yang memiliki minimal 1 cucian, cucian dapat ditambahkan di menu laundry room</li>
-                    <li><span class="badge badge-success">Selesai</span> : Cucian telah selesai</li>
-                    <li><span class="badge badge-primary">Diambil</span> : Cucian telah di ambil/diantarkan</li>
-                </ul>
-                <hr />
-                Catatan tambahan <br />
-                <ul>
-                    <li>Untuk pembayaran, pengambilan, serta pembatalan cucian dapat dilakukan dengan mengklik kode kartu dari cucian</li>
-                </ul>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class='card card-primary' style="border-radius:3px; padding:12px;">
+                        <div style="padding-top:12px;padding-left:10px;">
+                            <h4 class="bold">Data Cucian</h4>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td>Kode Kartu</td>
+                                    <td>{{ $kode_kartu }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Kode Transaksi</td>
+                                    <td>{{ $kode_inv }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Pelanggan</td>
+                                    <td>{{ $customer->nama_lengkap }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Level Pelanggan</td>
+                                    <td>{{ $level->level }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Diskon Level</td>
+                                    <td>{{ $level->diskon }} %</td>
+                                </tr>
+                            </table>
+
+                            <!-- table cucian -->
+                            <h4 class="bold">Item Cucian</h4>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Item</th>
+                                        <th scope="col">Harga Satuan</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($cucianItems as $cucianItem)
+                                    <tr>
+                                        <td>{{ $cucianItem->produk }}</td>
+                                        <td>Rp. {{ $cucianItem->harga_satuan }}</td>
+                                        <td>{{ $cucianItem->quantity }}</td>
+                                        <td>Rp. {{ $cucianItem->total }}</td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            Data Kosong
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- card kanan -->
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class='card card-primary' style="border-radius:3px; padding:12px;">
+                        <div style="padding-top:12px;padding-left:10px;">
+                            <h4 class="bold">Detail Transaksi</h4>
+                            <form action="{{ route('payment.store') }}" method="post">
+                                @csrf
+                                <div class="form-group row">
+                                    <input hidden type="text" class="form-control" name="kode_payment" value="{{ $kode_inv }}">
+                                    <input hidden type="text" class="form-control" name="kode_kartu" value="{{ $kode_kartu }}">
+                                    <input hidden type="text" class="form-control" name="pelanggan" value="{{ $customer->nama_lengkap }}">
+                                </div>
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td>Harga Service</td>
+                                        <input hidden type="text" class="form-control" name="total_cuci" value="{{ $cucianItems->sum('total') }}">
+                                        <td><label>Rp. {{ $cucianItems->sum('total') }}</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kode Promo</td>
+                                        <td>
+                                            <select class="form-control" name="kode_promo" onchange="pilihPromo()">
+                                                <option value="">-- Pilih Kode --</option>
+                                                @foreach ($promos as $promo)
+                                                <option value="{{ $promo->kd_promo }}">{{ $promo->deskripsi }} - {{ $promo->diskon }}%</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <!-- deskripsi dari promonya -->
+                                    <!-- <tr>
+                                        <td>Promo</td>
+                                        <td><label id="lblpromo"></label></td>
+                                    </tr> -->
+                                    <tr>
+                                        <td>Total Bayar</td>
+                                        <input readonly hidden type="text" class="form-control" name="total_bayar" value="{{ $cucianItems->sum('total') }}">
+                                        <td>
+                                            <label>Rp. {{ $cucianItems->sum('total') }}</label><br>
+                                            <span>Harga yang tercantum belum dikurang dengan diskon</span></td>
+                                        
+                                    </tr>
+                                </table>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-lg btn-primary btn-icon icon-left"><i class='fas fa-receipt'></i> Proses Pembayaran</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function pilihPromo() {
+    var kd_promo = document.getElementsByName("kode_promo");
+    var isinya = kd_promo.value;
+    console.log(kd_promo);
+    document.getElementById("lblpromo").innerHTML = kd_promo;
+    }
+</script>
 <!-- /.container-fluid -->
 @endsection

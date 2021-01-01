@@ -25,51 +25,7 @@ class CucianItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $data = $request->all();
-        // didapet kode_kartu, id_service, quantity
-        $dataLaundryCard = LaundryCard::findOrFail($request->id_kartu);
-
-        $dataService = ProdukService::findOrFail($request->id_service);
-        // hitung total
-        $total_temp = $dataLaundryCard->total_harga;
-        $total_cucian_temp = $dataService->harga * $request->quantity;
-        $total = $total_temp + $total_cucian_temp;
-
-        // update laundry card
-        $dataLaundryCard->update([
-            'total_harga' => $total
-        ]);
-
-        // set value ke table cucian item
-        $data['produk'] = $dataService->produk;
-        $data['kode_kartu'] = $dataLaundryCard->kode_kartu;
-        $data['harga_satuan'] = $dataService->harga;
-        $data['total'] = $total_cucian_temp;
-
-        CucianItem::create($data);
-        return redirect()->route('laundry-card.show', $request->id_kartu);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function create($id)
     {
         $produks = ProdukService::all();
         $laundryCard = LaundryCard::findOrFail($id);
@@ -82,6 +38,50 @@ class CucianItemController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        $dataLaudryCard = LaundryCard::where('kode_kartu', $request->kode_kartu)->firstOrFail();
+        // die($dataLaudryCard);
+
+        if($dataLaudryCard->status === 'Hold') {
+            $dataLaudryCard->update([
+                'status' => 'Cuci'
+            ]);
+        }
+
+        $dataService = ProdukService::findOrFail($request->id_service);
+        
+        // hitung total
+        $total_cucian_temp = $dataService->harga * $request->quantity;
+
+        // set value ke table cucian item
+        $data['produk'] = $dataService->produk;
+        $data['harga_satuan'] = $dataService->harga;
+        $data['total'] = $total_cucian_temp;
+
+        CucianItem::create($data);
+
+        return redirect()->route('laundry-card.show', $request->id_kartu);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -90,7 +90,7 @@ class CucianItemController extends Controller
     public function edit($id)
     {
         $item = CucianItem::findOrFail($id);
-        $laundryCard = LaundryCard::where('kode_kartu', $item->kode_kartu)->first();
+        $laundryCard = LaundryCard::where('kode_kartu', $item->kode_kartu)->firstOrFail();
 
         return view('pages.admin.cucian-item.edit', [
             'item' => $item,
@@ -107,26 +107,12 @@ class CucianItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        // didapet kode_kartu, id_service, quantity
-        $dataLaundryCard = LaundryCard::findOrFail($request->id_kartu);
-
         $dataCucian = CucianItem::findOrFail($id);
 
-        $dataService = ProdukService::where('produk', $request->produk)->first();
-
-        // kurangi total harga dengan harga sebelumnya
-
-        $total_temp = $dataLaundryCard->total_harga - $dataCucian->total;
+        $dataService = ProdukService::findOrFail($request->id_service);
 
         // hitung total
         $total_cucian_temp = $dataService->harga * $request->quantity;
-        $total = $total_temp + $total_cucian_temp;
-
-        // update laundry card
-        $dataLaundryCard->update([
-            'total_harga' => $total
-        ]);
 
         $dataCucian->update([
             'quantity' => $request->quantity,
@@ -145,15 +131,7 @@ class CucianItemController extends Controller
     public function destroy($id)
     {
         $data = CucianItem::findOrFail($id);
-        $LaundryData = LaundryCard::where('kode_kartu', $data->kode_kartu)->first();
-
-        // kurangi total harga
-        $total = $LaundryData->total_harga - $data->total;
-
-        // update laundry card
-        $LaundryData->update([
-            'total_harga' => $total
-        ]);
+        $LaundryData = LaundryCard::where('kode_kartu', $data->kode_kartu)->firstOrFail();
 
         $data->delete();
         return redirect()->route('laundry-card.show', $LaundryData->id);

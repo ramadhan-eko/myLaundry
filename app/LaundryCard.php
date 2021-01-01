@@ -25,8 +25,8 @@ class LaundryCard extends Model
         return $this->belongsTo(Customer::class, 'id_pelanggan', 'id')->where('status', 'cuci');
     }
 
-    // public function itemCucian()
-    // {
-    //     return $this->hasMany(CucianItem::class, 'kode_kartu', 'kode_kartu');
-    // }
+    public function itemCucian()
+    {
+        return $this->belongsTo(CucianItem::class, 'kode_kartu', 'kode_kartu');
+    }
 }

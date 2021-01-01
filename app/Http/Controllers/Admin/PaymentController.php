@@ -3,7 +3,14 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Payment;
+use App\CucianItem;
+use App\LaundryCard;
+use App\Customer;
+use App\Promo;
+use App\UserLevel;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -14,7 +21,10 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.payment.index');
+        $items = Payment::all();
+        return view('pages.admin.payment.index', [
+            'items' => $items
+        ]);
     }
 
     /**
@@ -22,9 +32,28 @@ class PaymentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($kode_kartu)
     {
-        //
+        $kode_inv = 'INV-' . Carbon::now()->year . "-" . Carbon::now()->month . "-" . substr($kode_kartu, -6);
+        $dataKartu = LaundryCard::where('kode_kartu', $kode_kartu)->firstOrFail();
+        $customer = Customer::findOrFail($dataKartu->id_pelanggan);
+        $level = UserLevel::findOrFail($customer->id_level);
+        $CucianItems = CucianItem::with([
+            'getDetailItem'
+        ])->where('kode_kartu', $kode_kartu)->get();
+        $hargaAkhir = $CucianItems->sum('total') - ($CucianItems->sum('total') * $level->diskon);
+        $promos = Promo::all();
+
+
+        return view('pages.admin.payment.create', [
+            'kode_kartu' => $kode_kartu,
+            'kode_inv' => $kode_inv,
+            'customer' => $customer,
+            'level' => $level,
+            'cucianItems' => $CucianItems,
+            'hargaAkhir' => $hargaAkhir,
+            'promos' => $promos
+        ]);
     }
 
     /**
@@ -35,7 +64,34 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        if ($data['kode_promo'] != null) {
+            $promo = Promo::where('kd_promo', $request->kode_promo)->firstOrFail();
+            $data['kode_promo'] = $promo->kd_promo;
+            $data['diskon'] = $promo->diskon;
+
+            // nantinya dikirim dari form ketika sudah menggunakan jquery
+            $total_bayar = ($request->total_cuci - ($request->total_cuci * ($promo->diskon / 100)));
+            $data['total_bayar'] = $total_bayar;
+        } else {
+            $data['kode_promo'] = null;
+            $data['diskon'] = 0;
+
+            // nantinya dikirim dari form ketika sudah menggunakan jquery
+            $data['total_bayar'] = $request->total_cuci;
+        }
+
+        $data['waktu_bayar'] = Carbon::now();
+
+        $dataKartu = LaundryCard::where('kode_kartu', $request->kode_kartu)->firstOrFail();
+
+        $dataKartu->update([
+            'pembayaran' => 'Sudah Bayar'
+        ]);
+
+        Payment::create($data);
+
+        return redirect()->route('laundry-card.show', $dataKartu->id)->with('success', 'Data laundry untuk kode ' . $dataKartu->kode_kartu . ' sudah dibayarkan');
     }
 
     /**
@@ -47,11 +103,7 @@ class PaymentController extends Controller
     // route show digunakan untuk create invoice
     public function show($kode_kartu)
     {
-        $kode_inv = 'INV/' . $kode_kartu;
-        return view('pages.admin.payment.create', [
-            'kode_kartu' => $kode_kartu,
-            'kode_inv' => $kode_inv
-        ]);
+        //
     }
 
     /**

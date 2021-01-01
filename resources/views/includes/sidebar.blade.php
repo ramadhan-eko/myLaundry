@@ -43,7 +43,7 @@
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{{ route('payment.index') }}">
           <i class="fas fa-fw fa-shopping-cart"></i>
           <span>Data Transaksi</span></a>
       </li>
